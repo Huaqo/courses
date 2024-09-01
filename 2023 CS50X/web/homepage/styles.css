@@ -1,0 +1,39 @@
+.container {
+  margin-top: 50px;
+  margin-bottom: 50px;
+  max-width: 1200px;
+  padding: 20px;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.container:hover {
+  max-width: 1200px;
+  padding: 20px;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  box-shadow: 0 0 1000px rgba(0, 0, 255, .5);
+  font-size: 25px;
+}
+
+.btn-dark {
+  background-color: #343a40;
+  border-color: #343a40;
+}
+
+.btn-dark:hover {
+  background-color: #212529;
+  border-color: #212529;
+  border-radius: 50px;
+}
+
+#message {
+  color: blue;
+}
+
+p {
+  font-size: 16px;
+	color: blue;
+}
+
