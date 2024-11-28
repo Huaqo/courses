@@ -2,6 +2,11 @@
 
 #include <stdio.h>
 
+int count = 1;
+
+
+void rec_out(int n);
+
 void decr(int n)
 {
    rec_out(--n);
@@ -9,7 +14,6 @@ void decr(int n)
 
 void rec_out(int n)
 {
-   int count = 1;
    printf("Die %d. Ausgabe.\n", count);
    count++;
    if (n > 1)

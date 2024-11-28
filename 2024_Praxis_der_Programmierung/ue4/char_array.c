@@ -15,11 +15,14 @@ int main() {
 
   printf("\nEingabe: %s", eingabe);
 
-  for (index = 0; eingabe[index] != '\0'; index++) 
-    if (eingabe[index] == 'a') 
+  for (index = 0; eingabe[index] != '\0'; index++)
+    if (eingabe[index] == 'a')
       break;
 
+  if (eingabe[index] == '\0')
+    printf("Der String enthält kein ’a’.");
+  else
+    printf("Das erste 'a' ist an Position %d.\n", index + 1);
 
   return 0;
 }
-     

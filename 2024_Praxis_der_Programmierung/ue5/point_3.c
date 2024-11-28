@@ -33,15 +33,16 @@ int main() {
     printf("\ny-Koordinate von p: %f", ptr->y);
 
     free(ptr);
+    ptr = NULL;
 
-    printf("\n");
-    printf("\nnach free():");
+    // printf("\n");
+    // printf("\nnach free():");
     
-    // Dangling Pointer!
-    printf("\nx-Koordinate von p: %f", ptr->x);
-    printf("\ny-Koordinate von p: %f", ptr->y);
+    // // Dangling Pointer!
+    // printf("\nx-Koordinate von p: %f", ptr->x);
+    // printf("\ny-Koordinate von p: %f", ptr->y);
 
-    printf("\n\n");
+    // printf("\n\n");
   }
   return 0;
 }

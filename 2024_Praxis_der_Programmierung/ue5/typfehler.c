@@ -9,19 +9,19 @@ int main() {
 
   float n;
   int rvalue;
+  int c;
 
-  printf("Geben Sie eine Zahl ein: ");
-  rvalue = scanf("%f", &n);
-
-  // to be debugged: (Tip: Siehe VL4 F18)
-  printf("Rueckgabewert von scanf: %d\n", rvalue);
-
-  if (rvalue == 0) {	
-    printf("Sie haben keine Zahl eingegeben.\n\n");
-    exit(EXIT_FAILURE);
-
+  while (1){
+    stdout("Geben Sie eine Zahl ein: ");
+    rvalue = scanf("%f", &n);
+    stdout("Rueckgabewert von scanf: %d\n", rvalue);
+    if (rvalue == 1){
+      break;
+    } else {
+      while ((c = getchar()) != '\n' && c != EOF) {}
+    }   
   }
 
-  printf("Die Zahl ist %f\n", n);
+  stdout("Die Zahl ist %f\n", n);
   return 0;
 }
