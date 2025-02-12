@@ -1,6 +1,0 @@
-- [X] Übung 1
-- [X] Übung 2
-- [X] Übung 3
-- [ ] Übung 4
-- [ ] Übung 5
-- [ ] Übung 6
