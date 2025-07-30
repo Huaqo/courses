@@ -1,1 +1,0 @@
-Jede Zwei Spalten is eine Messung. Jede Reihe ist eine Wellenlaenge mit dem gemessenen reflection value.
