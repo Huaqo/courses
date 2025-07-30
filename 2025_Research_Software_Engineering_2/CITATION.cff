@@ -1,0 +1,35 @@
+# .cff
+cff-version: 1.2.0
+title: SolarLytics
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
+type: software
+authors:
+  - given-names: 'Joaquin '
+    family-names: Gottlebe
+    email: gottlebe@uni-potsdam.de
+    affiliation: University of Potsdam
+  - given-names: Flora
+    family-names: Grellmann
+    email: grellmann@uni-potsdam.de
+    affiliation: University of Potsdam
+  - given-names: Mirjam
+    family-names: Rupinski
+    email: rupinski@uni-potsdam.de
+    affiliation: University of Potsdam
+repository-code: 'https://gitup.uni-potsdam.de/gottlebe/solarlytics'
+abstract: >-
+  Solarlytics estimates the theoretical energy production of
+  German solar parks by combining area data from
+  OpenStreetMap with sunshine duration from the German
+  Weather Service. The results are compared to actual
+  photovoltaic electricity feed-in data from Destatis.
+keywords:
+  - photovoltaic data
+  - Solarparc
+  - Sunshine duration
+  - Python
+license: MIT
+version: '1.0'
+date-released: '2025-07-20'

@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hochschulen in Deutschland</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            margin: 0;
+            flex-direction: column;
+            padding: 100px;
+            padding-top: 20px;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+            align-self: center;
+        }   
+        h2 {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 20px;
+        }
+        form {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        select, input[type="number"], input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+        }
+        .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding: 12px;
+            border: 1px solid #ccc;
+        }
+        table {
+            width: 100%;
+            padding: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        tr:hover {
+            background-color: #c6ffab;
+        }
+        input[type=number]::-webkit-inner-spin-button, 
+        input[type=number]::-webkit-outer-spin-button { 
+            -webkit-appearance: none; 
+            margin: 0; 
+        }
+        input[type=number] {
+            -moz-appearance: textfield;
+        } 
+        #map {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 20px;
+        }
+        details {
+            margin: 0 20px 10px 20px; 
+        
+        }
+        .shortcuts-label {
+            margin: 0 20px 10px 20px; 
+            font-weight: bold;
+        }
+        .shortcuts {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); 
+            gap: 10px;
+            padding: 0 20px; 
+            max-width: 100%; 
+            box-sizing: border-box; 
+            margin: 0 auto; 
+        }
+        button {
+            background-color: #f0f0f0;
+            color: black;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: none;
+            cursor: pointer;
+            border: 1px solid #ccc;
+            width: 100%; 
+            box-sizing: border-box;
+        }
+        button:hover {
+            background-color: #c6ffab;
+            color: black;
+        }
+        a {
+            text-decoration: none; 
+            color: inherit; 
+        }        
+    </style>
+</head>
+<body>
+    <h1>Hochschulen in Deutschland</h1>
+    
+    <h2>Übersicht</h2>
+    
+    <form id="groupByForm" method="get" action="/">
+        <label for="group_by">Gruppieren nach:</label>
+        <select name="group_by" id="group_by" onchange="submitGroupByForm()">
+            {% for option in order_by_options %}
+                <option value="{{ option.value }}" {% if parameters.group_by == option.value %}selected{% endif %}>{{ option.label }}</option>
+            {% endfor %}
+        </select>
+    </form>
+    
+    {{ table_grouped | safe }}
+
+    <h2>Gesamter Datensatz</h2>
+    
+    <label class="shortcuts-label">Shortcuts:</label>
+    <div class="shortcuts">
+        {% for button in shortcut_options %}
+            <a href="{{ button.url }}"><button>{{ button.label }}</button></a>
+        {% endfor %}    
+    </div>
+    
+    <form id="filterForm" method="get" action="/">
+        <label for="search">Filter:</label>
+        <select name="search_attr" id="search_attr" onchange="submitForm()">
+            {% for option in search_options %}
+                <option value="{{ option.value }}" {% if parameters.search_attr == option.value %}selected{% endif %}>{{ option.label }}</option>
+            {% endfor %}
+        </select>
+        <input type="text" name="search" id="search" value="{{ parameters.search }}">
+        <button type="submit">Filter</button>
+
+        <label for="order">Sortieren:</label>
+        <select name="order" id="order" onchange="submitForm()">
+            {% for option in order_options %}
+                <option value="{{ option.value }}" {% if parameters.order == option.value %}selected{% endif %}>{{ option.label }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="sort_by">Sortieren nach:</label>
+        <select name="sort_by" id="sort_by" onchange="submitForm()">
+            {% for option in sort_by_options %}
+                <option value="{{ option.value }}" {% if parameters.sort_by == option.value %}selected{% endif %}>{{ option.label }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="limit">Limitieren:</label>
+        <input type="number" name="limit" id="limit" value="{{ parameters.limit }}" min="1" onchange="submitForm()">
+
+        <label>Infos:</label><br>
+        <div class="checkbox-group">
+            {% for checkbox in checkbox_options %}
+                <input type="checkbox" name="attributes" value="{{ checkbox.value }}" {% if checkbox.value in parameters.attributes %}checked{% endif %} onchange="submitForm()"> {{ checkbox.label }}<br>
+            {% endfor %}        
+        </div>
+
+        <input type="hidden" name="generate_map" id="generate_map" value="">
+
+    </form>
+
+    <div id="map">
+        {{ map |safe }}
+    </div>
+    
+    {{ table | safe }}
+
+    <script>
+        function submitForm() {
+            document.getElementById('generate_map').value = "true";
+            document.getElementById('filterForm').submit();
+        }
+        
+        function submitGroupByForm() {
+            document.getElementById('groupByForm').submit();
+        }
+        
+        function generateMap() {
+            document.getElementById('generate_map').value = "true";
+            document.getElementById('filterForm').submit();
+        }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            checkboxes.forEach(function(checkbox) {
+                checkbox.addEventListener('change', function() {
+                    if (checkbox.checked) {
+                        checkbox.setAttribute('checked', 'checked');
+                    } else {
+                        checkbox.removeAttribute('checked');
+                    }
+                });
+            });
+            document.getElementById('group_by').addEventListener('change', submitGroupByForm);
+        });
+    </script>
+</body>
+</html>

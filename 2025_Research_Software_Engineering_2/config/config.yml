@@ -1,0 +1,7 @@
+result_path: "results"
+report_path: "workflow/report"
+data_path: "data"
+scripts_path: "workflow/scripts"
+
+year: "2024"
+efficiency: 0.00216

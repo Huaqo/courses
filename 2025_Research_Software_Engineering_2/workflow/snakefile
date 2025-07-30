@@ -1,0 +1,63 @@
+import os
+import platform
+from pathlib import Path
+
+configfile: "config/config.yml"
+
+RESULTS = config["result_path"]
+SUNSHINE_DATA = "sunshine_duration"
+SUNSHINE_FILES = glob_wildcards(f"{RESULTS}/{SUNSHINE_DATA}/{{file}}.txt").file
+REPORT = config["report_path"]
+DATA = config["data_path"]
+YEAR = config["year"]
+EFFICIENCY = config["efficiency"]
+os.makedirs(RESULTS, exist_ok=True)
+os.makedirs(f"{RESULTS}/{SUNSHINE_DATA}/", exist_ok=True)
+os.makedirs(REPORT, exist_ok=True)
+os.makedirs(DATA, exist_ok=True)
+SRC = config["scripts_path"]
+
+# Detect the platform and set the Python executable
+PYTHON = "python3" if platform.system() != "Windows" else "python"
+
+
+# include all Rules
+include: Path("rules/solarparc_data_processing.smk")
+include: Path("rules/photovoltaic_data_processing.smk")
+include: Path("rules/sunshine_duration_data_processing.smk")
+include: Path("rules/analysis.smk")
+
+
+# Defines a complete workflow run
+rule all:
+	input:
+		f"{RESULTS}/sunshine_duration.csv",
+		f"{RESULTS}/sunshine_duration_yearly.csv",
+		f"{RESULTS}/sunshine_duration_yearly_trimmed.csv",
+		f"{REPORT}/sunshine_duration_yearly_trimmed.png",
+		f"{RESULTS}/solarparcs_area.txt",
+		f"{REPORT}/solarparcs.png",
+		f"{RESULTS}/solarparcs_energy.csv",
+		f"{RESULTS}/solarparcs_energy_yearly.csv",
+		f"{RESULTS}/solarparcs_energy_yearly_trimmed.csv",
+		f"{REPORT}/solarparcs_energy_yearly_trimmed.png",
+		f"{RESULTS}/pv_data_cleaned.csv",
+		f"{RESULTS}/pv_data_cleaned_trimmed.csv",
+		f"{RESULTS}/pv_data_cleaned_trimmed_collapsed.csv",
+		f"{REPORT}/pv_data_cleaned_trimmed_collapsed.png",
+		f"{RESULTS}/energy_difference.csv",
+		f"{REPORT}/pv_monthly_change_{YEAR}.png",
+		f"{REPORT}/energy_difference.png"
+
+
+# Removes all output files
+rule clean:
+	run:
+		if platform.system() == "Windows":
+			os.system(f'del /Q "{RESULTS}\\{SUNSHINE_DATA}"')
+			os.system(f'del /Q "{RESULTS}"')
+			os.system(f'del /Q "{REPORT}"')
+		else:
+			os.system(f'rm -rf {RESULTS}/{SUNSHINE_DATA}')
+			os.system(f'rm -rf {RESULTS}')
+			os.system(f'rm -rf {REPORT}')

@@ -1,0 +1,45 @@
+stages:
+  - test
+  - lint
+  - snakemake
+
+test_project:
+  stage: test
+  image: python:3.12-slim
+  tags: 
+    - public
+  before_script:
+    - python3 -m venv venv
+    - source venv/bin/activate
+    - pip install --upgrade pip
+    - pip install -r requirements.txt
+  script:
+    - pytest
+
+
+lint_project:
+  stage: lint
+  image: python:3.12-slim
+  tags:
+    - public
+  before_script:
+    - python3 -m venv venv
+    - source venv/bin/activate
+    - pip install --upgrade pip
+    - pip install pylint
+    - pip install -r requirements.txt
+  script:
+    - pylint workflow/scripts tests
+
+snakemake_project:
+  stage: snakemake
+  image: python:3.12-slim
+  tags:
+    - public
+  before_script:
+    - pip install --upgrade pip
+    - pip install -r requirements.txt
+  script:
+    - snakemake --cores 1 --forceall
+  after_script:
+    - rm -r results

@@ -1,0 +1,10 @@
+.DS_Store
+__pycache__
+Thumbs.db
+venv/
+results/
+.snakemake/
+*.swp
+tmp/
+log.txt
+workflow/report
